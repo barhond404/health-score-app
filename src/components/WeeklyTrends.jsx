@@ -64,13 +64,13 @@ const WeeklyTrends = ({ weeklyData }) => {
     if (active && payload && payload.length) {
       const data = payload[0].payload;
       return (
-        <div className="bg-white p-4 rounded-lg shadow-lg border">
-          <p className="font-semibold text-primary">{label}</p>
-          <p className="text-sm text-secondary">Score: {data.score}/100</p>
-          <p className="text-sm text-secondary">Steps: {data.steps?.toLocaleString()}</p>
-          <p className="text-sm text-secondary">Heart Rate: {data.heartRate} bpm</p>
-          <p className="text-sm text-secondary">Sleep: {data.sleep}h</p>
-          <p className="text-sm text-secondary">Activity: {data.activity} min</p>
+        <div className="bg-white p-4 rounded-lg shadow-lg border border-gray-200">
+          <p className="font-semibold text-gray-800">{label}</p>
+          <p className="text-sm text-gray-600">Score: {data.score}/100</p>
+          <p className="text-sm text-gray-600">Steps: {data.steps?.toLocaleString()}</p>
+          <p className="text-sm text-gray-600">Heart Rate: {data.heartRate} bpm</p>
+          <p className="text-sm text-gray-600">Sleep: {data.sleep}h</p>
+          <p className="text-sm text-gray-600">Activity: {data.activity} min</p>
         </div>
       );
     }
@@ -80,7 +80,7 @@ const WeeklyTrends = ({ weeklyData }) => {
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-white">Weekly Trends</h2>
+        <h3 className="text-xl font-bold text-primary">Weekly Health Trends</h3>
         <div className="flex items-center gap-2">
           {getTrendIcon()}
           <span className={`text-sm font-semibold ${getTrendColor()}`}>
@@ -90,150 +90,121 @@ const WeeklyTrends = ({ weeklyData }) => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="space-y-6">
         {/* Health Score Trend */}
-        <div className="card">
-          <h3 className="text-lg font-semibold text-primary mb-4">Health Score Trend</h3>
-          <ResponsiveContainer width="100%" height={300}>
+        <div className="bg-white rounded-xl p-4 shadow-soft">
+          <h4 className="text-lg font-semibold text-gray-800 mb-4">Health Score Trend</h4>
+          <ResponsiveContainer width="100%" height={250}>
             <LineChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="var(--border-color)" />
+              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
               <XAxis 
                 dataKey="date" 
-                stroke="var(--text-secondary)"
-                fontSize={12}
+                tick={{ fontSize: 12, fill: '#6b7280' }}
+                axisLine={false}
+                tickLine={false}
               />
               <YAxis 
-                stroke="var(--text-secondary)"
-                fontSize={12}
                 domain={[0, 100]}
+                tick={{ fontSize: 12, fill: '#6b7280' }}
+                axisLine={false}
+                tickLine={false}
               />
               <Tooltip content={<CustomTooltip />} />
               <Line 
                 type="monotone" 
                 dataKey="score" 
-                stroke="var(--primary-color)" 
+                stroke="#667eea" 
                 strokeWidth={3}
-                dot={{ fill: 'var(--primary-color)', strokeWidth: 2, r: 4 }}
-                activeDot={{ r: 6, stroke: 'var(--primary-color)', strokeWidth: 2 }}
+                dot={{ fill: '#667eea', strokeWidth: 2, r: 4 }}
+                activeDot={{ r: 6, stroke: '#667eea', strokeWidth: 2 }}
               />
             </LineChart>
           </ResponsiveContainer>
         </div>
 
-        {/* Steps Trend */}
-        <div className="card">
-          <h3 className="text-lg font-semibold text-primary mb-4">Daily Steps</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="var(--border-color)" />
-              <XAxis 
-                dataKey="date" 
-                stroke="var(--text-secondary)"
-                fontSize={12}
-              />
-              <YAxis 
-                stroke="var(--text-secondary)"
-                fontSize={12}
-              />
-              <Tooltip 
-                formatter={(value) => [value.toLocaleString(), 'Steps']}
-                labelFormatter={(label) => `Date: ${label}`}
-              />
-              <Bar 
-                dataKey="steps" 
-                fill="var(--primary-color)"
-                radius={[4, 4, 0, 0]}
-              />
-            </BarChart>
-          </ResponsiveContainer>
+        {/* Steps and Activity Comparison */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="bg-white rounded-xl p-4 shadow-soft">
+            <h4 className="text-lg font-semibold text-gray-800 mb-4">Daily Steps</h4>
+            <ResponsiveContainer width="100%" height={200}>
+              <BarChart data={chartData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                <XAxis 
+                  dataKey="date" 
+                  tick={{ fontSize: 10, fill: '#6b7280' }}
+                  axisLine={false}
+                  tickLine={false}
+                />
+                <YAxis 
+                  tick={{ fontSize: 10, fill: '#6b7280' }}
+                  axisLine={false}
+                  tickLine={false}
+                />
+                <Tooltip content={<CustomTooltip />} />
+                <Bar 
+                  dataKey="steps" 
+                  fill="#3b82f6" 
+                  radius={[4, 4, 0, 0]}
+                />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+
+          <div className="bg-white rounded-xl p-4 shadow-soft">
+            <h4 className="text-lg font-semibold text-gray-800 mb-4">Active Minutes</h4>
+            <ResponsiveContainer width="100%" height={200}>
+              <BarChart data={chartData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                <XAxis 
+                  dataKey="date" 
+                  tick={{ fontSize: 10, fill: '#6b7280' }}
+                  axisLine={false}
+                  tickLine={false}
+                />
+                <YAxis 
+                  tick={{ fontSize: 10, fill: '#6b7280' }}
+                  axisLine={false}
+                  tickLine={false}
+                />
+                <Tooltip content={<CustomTooltip />} />
+                <Bar 
+                  dataKey="activity" 
+                  fill="#10b981" 
+                  radius={[4, 4, 0, 0]}
+                />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
         </div>
 
-        {/* Heart Rate Trend */}
-        <div className="card">
-          <h3 className="text-lg font-semibold text-primary mb-4">Resting Heart Rate</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="var(--border-color)" />
-              <XAxis 
-                dataKey="date" 
-                stroke="var(--text-secondary)"
-                fontSize={12}
-              />
-              <YAxis 
-                stroke="var(--text-secondary)"
-                fontSize={12}
-              />
-              <Tooltip 
-                formatter={(value) => [value, 'BPM']}
-                labelFormatter={(label) => `Date: ${label}`}
-              />
-              <Line 
-                type="monotone" 
-                dataKey="heartRate" 
-                stroke="var(--danger-color)" 
-                strokeWidth={2}
-                dot={{ fill: 'var(--danger-color)', strokeWidth: 2, r: 3 }}
-              />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
-
-        {/* Sleep Duration Trend */}
-        <div className="card">
-          <h3 className="text-lg font-semibold text-primary mb-4">Sleep Duration</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="var(--border-color)" />
-              <XAxis 
-                dataKey="date" 
-                stroke="var(--text-secondary)"
-                fontSize={12}
-              />
-              <YAxis 
-                stroke="var(--text-secondary)"
-                fontSize={12}
-              />
-              <Tooltip 
-                formatter={(value) => [value, 'Hours']}
-                labelFormatter={(label) => `Date: ${label}`}
-              />
-              <Bar 
-                dataKey="sleep" 
-                fill="var(--secondary-color)"
-                radius={[4, 4, 0, 0]}
-              />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-      </div>
-
-      {/* Weekly Summary */}
-      <div className="card mt-6">
-        <h3 className="text-lg font-semibold text-primary mb-4">Weekly Summary</h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="text-center">
-            <div className="text-2xl font-bold text-primary">
-              {Math.round(chartData.reduce((sum, day) => sum + day.score, 0) / chartData.length)}
+        {/* Weekly Summary */}
+        <div className="bg-white rounded-xl p-4 shadow-soft">
+          <h4 className="text-lg font-semibold text-gray-800 mb-4">Weekly Summary</h4>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="text-center">
+              <div className="text-2xl font-bold text-blue-500">
+                {Math.round(chartData.reduce((sum, day) => sum + day.steps, 0) / chartData.length).toLocaleString()}
+              </div>
+              <div className="text-sm text-gray-600">Avg Steps</div>
             </div>
-            <div className="text-sm text-secondary">Avg Score</div>
-          </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-primary">
-              {Math.round(chartData.reduce((sum, day) => sum + day.steps, 0) / chartData.length).toLocaleString()}
+            <div className="text-center">
+              <div className="text-2xl font-bold text-green-500">
+                {Math.round(chartData.reduce((sum, day) => sum + day.activity, 0) / chartData.length)}
+              </div>
+              <div className="text-sm text-gray-600">Avg Activity</div>
             </div>
-            <div className="text-sm text-secondary">Avg Steps</div>
-          </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-primary">
-              {Math.round(chartData.reduce((sum, day) => sum + (day.heartRate || 0), 0) / chartData.filter(day => day.heartRate).length)}
+            <div className="text-center">
+              <div className="text-2xl font-bold text-purple-500">
+                {Math.round(chartData.reduce((sum, day) => sum + day.score, 0) / chartData.length)}
+              </div>
+              <div className="text-sm text-gray-600">Avg Score</div>
             </div>
-            <div className="text-sm text-secondary">Avg Heart Rate</div>
-          </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-primary">
-              {(chartData.reduce((sum, day) => sum + (day.sleep || 0), 0) / chartData.filter(day => day.sleep).length).toFixed(1)}
+            <div className="text-center">
+              <div className="text-2xl font-bold text-orange-500">
+                {Math.round(chartData.reduce((sum, day) => sum + (day.sleep || 0), 0) / chartData.length * 10) / 10}
+              </div>
+              <div className="text-sm text-gray-600">Avg Sleep</div>
             </div>
-            <div className="text-sm text-secondary">Avg Sleep (h)</div>
           </div>
         </div>
       </div>

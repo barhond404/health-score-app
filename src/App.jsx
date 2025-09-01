@@ -68,8 +68,8 @@ function App() {
 
   const renderHealthSection = () => (
     <div>
-      {/* Header */}
-      <header className="mb-8">
+      {/* Professional Header */}
+      <header className="dashboard-header">
         <div className="flex justify-between items-center">
           <div>
             <h1 className="text-4xl font-bold text-white mb-2">
@@ -94,7 +94,7 @@ function App() {
             </button>
           </div>
         </div>
-        <div className="text-white text-sm opacity-75 mt-2">
+        <div className="text-white text-sm opacity-75 mt-4">
           Last updated: {format(lastUpdated, 'MMM dd, yyyy HH:mm:ss')}
         </div>
       </header>
@@ -108,17 +108,21 @@ function App() {
         />
       </div>
 
-      {/* Metrics Grid */}
-      <div className="mb-8">
-        <MetricsGrid 
-          healthData={healthData.today}
-          scoreBreakdown={scoreBreakdown}
-        />
-      </div>
+      {/* Side-by-side Metrics and Trends */}
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 mb-8">
+        {/* Metrics Grid */}
+        <div className="chart-container">
+          <h3 className="text-xl font-bold text-primary mb-4">Health Metrics</h3>
+          <MetricsGrid 
+            healthData={healthData.today}
+            scoreBreakdown={scoreBreakdown}
+          />
+        </div>
 
-      {/* Weekly Trends */}
-      <div className="mb-8">
-        <WeeklyTrends weeklyData={healthData.weekly} />
+        {/* Weekly Trends */}
+        <div className="chart-container">
+          <WeeklyTrends weeklyData={healthData.weekly} />
+        </div>
       </div>
 
       {/* Recommendations */}
@@ -143,30 +147,20 @@ function App() {
   return (
     <div className="App">
       <div className="container">
-        {/* Navigation Tabs */}
-        <div className="mb-8">
-          <div className="flex bg-white bg-opacity-10 rounded-lg p-1 backdrop-blur-sm">
-            <button
-              className={`flex-1 py-3 px-6 rounded-md font-semibold transition-all ${
-                activeTab === 'health'
-                  ? 'bg-white text-primary shadow-lg'
-                  : 'text-white hover:bg-white hover:bg-opacity-10'
-              }`}
-              onClick={() => setActiveTab('health')}
-            >
-              Health
-            </button>
-            <button
-              className={`flex-1 py-3 px-6 rounded-md font-semibold transition-all ${
-                activeTab === 'policies'
-                  ? 'bg-white text-primary shadow-lg'
-                  : 'text-white hover:bg-white hover:bg-opacity-10'
-              }`}
-              onClick={() => setActiveTab('policies')}
-            >
-              Policies
-            </button>
-          </div>
+        {/* Professional Navigation Tabs */}
+        <div className="nav-tabs">
+          <button
+            className={`nav-tab ${activeTab === 'health' ? 'active' : ''}`}
+            onClick={() => setActiveTab('health')}
+          >
+            Health Dashboard
+          </button>
+          <button
+            className={`nav-tab ${activeTab === 'policies' ? 'active' : ''}`}
+            onClick={() => setActiveTab('policies')}
+          >
+            Policy Management
+          </button>
         </div>
 
         {/* Content based on active tab */}

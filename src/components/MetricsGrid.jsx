@@ -103,101 +103,62 @@ const MetricsGrid = ({ healthData, scoreBreakdown }) => {
   };
 
   return (
-    <div>
-      <h2 className="text-2xl font-bold text-white mb-6">Health Metrics</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {metrics.map((metric, index) => {
-          const IconComponent = metric.icon;
-          return (
-            <div key={index} className="card slide-up" style={{ animationDelay: `${index * 0.1}s` }}>
-              <div className="flex items-start justify-between mb-4">
-                <div className={`p-3 rounded-xl ${metric.bgColor}`}>
-                  <IconComponent className={`w-6 h-6 ${metric.color}`} />
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {metrics.map((metric, index) => {
+        const IconComponent = metric.icon;
+        const progressWidth = metric.score ? Math.min(100, metric.score) : 0;
+        
+        return (
+          <div 
+            key={index} 
+            className="bg-white rounded-xl p-4 shadow-soft hover:shadow-medium transition-all duration-300 border border-gray-100"
+          >
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-3">
+                <div className={`p-2 rounded-lg ${metric.bgColor}`}>
+                  <IconComponent className={`w-5 h-5 ${metric.color}`} />
                 </div>
-                {getScoreIcon(metric.score)}
+                <div>
+                  <h4 className="font-semibold text-gray-800">{metric.title}</h4>
+                  <p className="text-xs text-gray-500">{metric.description}</p>
+                </div>
               </div>
+              {getScoreIcon(metric.score)}
+            </div>
 
-              <div className="mb-4">
-                <h3 className="text-lg font-semibold text-primary mb-1">
-                  {metric.title}
-                </h3>
-                <p className="text-sm text-secondary mb-2">
-                  {metric.description}
-                </p>
-                
-                <div className="flex items-baseline gap-2 mb-2">
-                  <span className="text-3xl font-bold text-primary">
+            <div className="space-y-3">
+              <div className="flex justify-between items-end">
+                <div>
+                  <div className="text-2xl font-bold text-gray-800">
                     {metric.value}
-                  </span>
-                  <span className="text-sm text-secondary">
-                    {metric.unit}
-                  </span>
+                    <span className="text-sm font-normal text-gray-500 ml-1">{metric.unit}</span>
+                  </div>
+                  <div className="text-xs text-gray-500">Target: {metric.target}</div>
                 </div>
-
-                <div className="text-sm text-secondary">
-                  Target: {metric.target}
+                <div className="text-right">
+                  <div className={`text-lg font-bold ${getScoreColor(metric.score)}`}>
+                    {metric.score || '--'}
+                  </div>
+                  <div className="text-xs text-gray-500">score</div>
                 </div>
               </div>
 
-              {/* Score Display */}
-              {metric.score !== null && metric.score !== undefined && (
-                <div className="mb-4">
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-sm font-medium text-primary">Score</span>
-                    <span className={`text-sm font-bold ${getScoreColor(metric.score)}`}>
-                      {metric.score}/100
-                    </span>
-                  </div>
-                  
-                  {/* Progress Bar */}
-                  <div className="progress-bar">
-                    <div 
-                      className={`progress-fill ${getProgressColor(metric.score)}`}
-                      style={{ width: `${metric.score}%` }}
-                    />
-                  </div>
+              <div className="relative">
+                <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div 
+                    className={`h-2 rounded-full transition-all duration-500 ${getProgressColor(metric.score)}`}
+                    style={{ width: `${progressWidth}%` }}
+                  />
                 </div>
-              )}
-
-              {/* Additional Details */}
-              <div className="text-xs text-secondary">
-                {metric.title === 'Steps' && healthData.steps && (
-                  <div>{(healthData.steps / 10000 * 100).toFixed(1)}% of daily goal</div>
-                )}
-                {metric.title === 'Heart Rate' && healthData.heartRate && (
-                  <div>
-                    Avg: {healthData.heartRate.averageHeartRate} bpm | 
-                    Max: {healthData.heartRate.maxHeartRate} bpm
-                  </div>
-                )}
-                {metric.title === 'Sleep' && healthData.sleep && (
-                  <div>
-                    Quality: {(healthData.sleep.quality * 100).toFixed(0)}% | 
-                    Deep: {healthData.sleep.deepSleep}h
-                  </div>
-                )}
-                {metric.title === 'Activity' && healthData.activity && (
-                  <div>
-                    Exercise: {healthData.activity.exerciseMinutes}min | 
-                    Calories: {healthData.activity.caloriesBurned}
-                  </div>
-                )}
-                {metric.title === 'Nutrition' && healthData.nutrition && (
-                  <div>
-                    Protein: {healthData.nutrition.protein}g | 
-                    Fiber: {healthData.nutrition.fiber}g
-                  </div>
-                )}
-                {metric.title === 'Hydration' && healthData.hydration && (
-                  <div>
-                    {(healthData.hydration.waterIntake / healthData.hydration.target * 100).toFixed(1)}% of daily goal
-                  </div>
-                )}
+                <div className="flex justify-between text-xs text-gray-500 mt-1">
+                  <span>0</span>
+                  <span>100</span>
+                </div>
               </div>
             </div>
-          );
-        })}
-      </div>
+          </div>
+        );
+      })}
     </div>
   );
 };
